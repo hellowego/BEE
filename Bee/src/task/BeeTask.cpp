@@ -48,34 +48,48 @@ void BeeTask::getMoneyType()
 
 void BeeTask::runTask()
 {
-	std::string hostName = _taskParams.getDataSource().getHostName();
-	std::string url = _taskParams.getDataSource().getUrl();
-	string response = getUrlResponse(hostName, url);
-	/*Application& app = Application::instance();
-	while (!sleep(5000))
+	while (1)
 	{
-		Util::getTraceLogger()->information("log");
-		Application::instance().logger().information("busy doing nothing... " + DateTimeFormatter::format(app.uptime()));
-	}*/
+		try
+		{
+			std::string hostName = _taskParams.getDataSource().getHostName();
+			std::string url = _taskParams.getDataSource().getUrl();
+			string response = getUrlResponse(hostName, url);
 
-	
-	std::vector<MoneyRule> moneyRuleVec = _taskParams.getMoneyRule();
-	for (std::vector<MoneyRule>::iterator it = moneyRuleVec.begin(); it != moneyRuleVec.end(); it++)
-	{
-		FieldPosition fp = _taskParams.getFieldPosition().find(it->getRuleNo())->second;
-		extract(response, *it, fp);
+			std::vector<MoneyRule> moneyRuleVec = _taskParams.getMoneyRule();
+			for (std::vector<MoneyRule>::iterator it = moneyRuleVec.begin(); it != moneyRuleVec.end(); it++)
+			{
+				FieldPosition fp = _taskParams.getFieldPosition().find(it->getRuleNo())->second;
+				extract(response, *it, fp);
+			}
+
+			Sleep(1000);
+			
+		}
+		catch (MySQLException* e)
+		{
+			Util::getTraceLogger()->error(e->what());		
+		}
+		catch (Poco::Data::DataException* e)
+		{
+			Util::getTraceLogger()->error(e->what());	
+		}
+		catch (Poco::Exception* e)
+		{
+			Util::getTraceLogger()->error(e->what());
+		}
+		catch (std::exception* e)
+		{
+			Util::getTraceLogger()->error(e->what());
+		}
+		catch (...)
+		{
+			Util::getTraceLogger()->error("unknow exception.");
+		}
 	}
-
-	//string response = getUrlResponse("fx.cmbchina.com","/hq/");
-	//extract(response, "港币"			, "查看历史", 0);//港元
-	//extract(response, "澳大利亚元"		, "查看历史", 1);//澳大利亚元
-	//extract(response, "美元"			, "查看历史", 2);//美元
-	//extract(response, "欧元"			, "查看历史", 3);//欧元
-	//extract(response, "加拿大元"		, "查看历史", 4);//加拿大元
-	//extract(response, "英镑"			, "查看历史", 5);//英镑
-	//extract(response, "日元"			, "查看历史", 6);//日元
-	//extract(response, "新加坡元"		, "查看历史", 7);//新加坡元
-	//extract(response, "瑞士法郎"		, "查看历史", 8);//瑞士法郎
+	
+	
+	
 }
 
 void BeeTask::extract(const string& html, MoneyRule& moneyRule, FieldPosition& fieldPosition)

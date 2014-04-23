@@ -29,11 +29,6 @@ public:
 	void setState(std::string& state) {_state = state;}
 	void setDt(Poco::DateTime& dt) {_dt = dt;}
 
-
-	
-	
-	
-
 protected:
 private:
 	std::string _sourceNo;

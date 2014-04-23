@@ -29,8 +29,7 @@ void RateDb::insertRate(Rate& rate, bool bl)
 	Poco::Data::Session session(Util::getSession());
 
 	session<<"INSERT INTO td_rate VALUES(?,?,?,?,?,?,?,?,?) ", use(rate), now;
-	session<<"INSERT INTO td_rate(sourceNo,moneyANo,moneyBNo) VALUES(?,?,?) ", 
-		use(rate.getSourceNo()), use(rate.getMoenyANo()), use(rate.getMoenyBNo()), now;
+	
 }
 
 void RateDb::insertHistoryRate(Rate& rate)

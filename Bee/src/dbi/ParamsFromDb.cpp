@@ -7,35 +7,9 @@ using namespace Poco::Data::Keywords;
 void ParamsFromDb::dataSource(std::vector<DataSource>& dataSouceVec)
 {
 	Poco::Data::Session session(Util::getSession());
-
-	Person p1("LN1", "FN1", "ADDR1", 1);
-	Person p2("LN2", "FN2", "ADDR2", 2);
-
-	session << "INSERT INTO Person VALUES (?,?,?,?)", use(p1), now; 
-
-	
-	
 	std::string state="1";
-
 	std::vector<DataSource> vec;
-
-	Poco::DateTime dt;
-	std::string dt1;
-	MoneyRule moneyRule;
-	session<<	"SELECT * FROM tp_moneyRule  " ,into(moneyRule), now;
-
-	//MoneyRule moneyRule1(11, "ss", "aa", "da", "sss", "1");
-	//moneyRule.setId(moneyRule.getId() + 1);
-	//session<< "INSERT INTO tp_moneyRule VALUES(?,?,?,?,?,?) ", use(moneyRule), now;
-
-
-	/*session<<	"SELECT sourceNo, sourceName, hostName, url "
-				"FROM tp_datasource "
-				"WHERE state= ?",
-				into(sourceNo), into(sourceName), into(hostName), into(url),
-				use(state), now;*/
-
-	//session<<	"SELECT createDate FROM tp_datasource WHERE state= ? " ,into(dt),use(state), now;
+	
 	try
 	{
 		session<<	"SELECT * FROM tp_datasource WHERE state= ? " ,into(dataSouceVec),use(state), now;
@@ -46,13 +20,6 @@ void ParamsFromDb::dataSource(std::vector<DataSource>& dataSouceVec)
 		
 	}
 	
-	
-
-	//session<<	"SELECT createdate FROM testDate  " ,into(dt), now;
-
-	//DataSource ds(sourceNo, sourceName, hostName, url);
-	//dataSouce = ds;
-
 }
 
 void ParamsFromDb::filedPosition(std::vector<FieldPosition>& fieldPositionVec)
